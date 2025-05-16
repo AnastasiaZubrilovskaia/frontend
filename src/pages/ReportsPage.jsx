@@ -1,0 +1,63 @@
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import reportService from '../api/reports';
+import SalesChart from '../components/reports/SalesChart';
+import TopCustomers from '../components/reports/TopCustomers';
+
+const ReportsPage = () => {
+  const [salesData, setSalesData] = useState([]);
+  const [topCustomers, setTopCustomers] = useState([]);
+  const [ordersByDay, setOrdersByDay] = useState([]);
+  const { user, token } = useAuth();
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const sales = await reportService.getSalesByCategory(token);
+        const customers = await reportService.getTopCustomers(token);
+        const orders = await reportService.getOrdersByDay(token);
+        
+        setSalesData(sales);
+        setTopCustomers(customers);
+        setOrdersByDay(orders);
+      } catch (error) {
+        console.error('Failed to fetch reports:', error);
+      }
+    };
+
+    if (user && token) {
+      fetchReports();
+    }
+  }, [user, token]);
+
+  return (
+    <div className="reports-page">
+      <h1>Reports</h1>
+      
+      <section className="report-section">
+        <h2>Sales by Category</h2>
+        <SalesChart data={salesData} />
+      </section>
+
+      {user?.role === 'admin' && (
+        <section className="report-section">
+          <h2>Top Customers</h2>
+          <TopCustomers customers={topCustomers} />
+        </section>
+      )}
+
+      <section className="report-section">
+        <h2>Orders by Day</h2>
+        <ul>
+          {ordersByDay.map((day) => (
+            <li key={day._id}>
+              {day._id}: {day.count} orders (${day.total.toFixed(2)})
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+};
+
+export default ReportsPage;
