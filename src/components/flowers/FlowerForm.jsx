@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import flowerService from '../../api/flowers';
 import { useAuth } from '../../context/AuthContext';
 
 const FlowerForm = ({ flower: initialData, onSuccess }) => {
-  const [flower, setFlower] = useState(initialData || {
+  const [flower, setFlower] = useState({
     name: '',
     description: '',
     price: 0,
@@ -12,6 +12,12 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
   });
   const [error, setError] = useState('');
   const { user, token } = useAuth();
+
+  useEffect(() => {
+    if (initialData) {
+      setFlower(initialData);
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,26 +29,35 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    if (!token) {
+      setError('Необходима авторизация');
+      return;
+    }
+
     try {
       if (initialData) {
         await flowerService.updateFlower(initialData._id, flower, token);
       } else {
         await flowerService.createFlower(flower, token);
       }
-      onSuccess();
+      if (typeof onSuccess === 'function') {
+        onSuccess();
+      }
     } catch (err) {
-      setError('Failed to save flower');
-      console.error(err);
+      console.error('Ошибка при сохранении цветка:', err);
+      setError(err.response?.data?.message || 'Ошибка при сохранении цветка');
     }
   };
 
   return (
     <div className="flower-form">
-      <h2>{initialData ? 'Edit Flower' : 'Add New Flower'}</h2>
+      <h2>{initialData ? 'Редактировать цветок' : 'Добавить новый цветок'}</h2>
       {error && <div className="error">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Name</label>
+          <label>Название</label>
           <input
             type="text"
             name="name"
@@ -52,7 +67,7 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
           />
         </div>
         <div className="form-group">
-          <label>Description</label>
+          <label>Описание</label>
           <textarea
             name="description"
             value={flower.description}
@@ -60,7 +75,7 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
           />
         </div>
         <div className="form-group">
-          <label>Price</label>
+          <label>Цена</label>
           <input
             type="number"
             name="price"
@@ -72,7 +87,7 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
           />
         </div>
         <div className="form-group">
-          <label>Category</label>
+          <label>Категория</label>
           <input
             type="text"
             name="category"
@@ -81,7 +96,7 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
           />
         </div>
         <div className="form-group">
-          <label>Stock</label>
+          <label>Количество</label>
           <input
             type="number"
             name="stock"
@@ -91,7 +106,7 @@ const FlowerForm = ({ flower: initialData, onSuccess }) => {
             required
           />
         </div>
-        <button type="submit">Save</button>
+        <button type="submit">Сохранить</button>
       </form>
     </div>
   );

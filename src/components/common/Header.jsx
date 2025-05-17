@@ -30,7 +30,6 @@ const Header = () => {
             {['manager', 'admin'].includes(user.role) && (
               <>
                 <Link to="/admin/orders" className="nav-link">Заказы</Link>
-                <Link to="/admin/flowers" className="nav-link">Управление товарами</Link>
               </>
             )}
 

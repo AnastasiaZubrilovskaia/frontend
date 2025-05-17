@@ -1,18 +1,14 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import flowerService from '../../api/flowers';
 
-const FlowerCard = ({ flower, onUpdate, onDelete }) => {
-  const { addToCart } = useCart(); // Получаем функцию из контекста
+const FlowerCard = ({ flower, onUpdate, onDelete, onAddToCart }) => {
+  const { addToCart } = useCart();
   const { user } = useContext(AuthContext);
 
-  const handleDelete = async () => {
-    try {
-      await flowerService.deleteFlower(flower._id, user.token);
+  const handleDelete = () => {
+    if (onDelete) {
       onDelete(flower._id);
-    } catch (err) {
-      console.error('Failed to delete flower:', err);
     }
   };
 
@@ -24,27 +20,48 @@ const FlowerCard = ({ flower, onUpdate, onDelete }) => {
 
   return (
     <div className="flower-card">
-      <h3>{flower.name}</h3>
-      <p>{flower.description}</p>
-      <p>Price: {flower.price}</p>
-      <p>Stock: {flower.stock}</p>
-      <p>Category: {flower.category}</p>
-      
-      {user?.role === 'customer' && flower.stock > 0 && (
-        <button 
-          onClick={handleAddToCart}
-          className="add-to-cart-btn"
-        >
-          Add to Cart
-        </button>
-      )}
-      
-      {['manager', 'admin'].includes(user?.role) && (
-        <div className="flower-actions">
-          <button onClick={() => onUpdate(flower)}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
-        </div>
-      )}
+      <div className="flower-image">
+        {flower.image ? (
+          <img src={flower.image} alt={flower.name} />
+        ) : (
+          <div className="no-image">Нет изображения</div>
+        )}
+      </div>
+      <div className="flower-info">
+        <h3>{flower.name}</h3>
+        <p className="description">{flower.description}</p>
+        <p className="price">{flower.price} ₽</p>
+        <p className="stock">В наличии: {flower.stock} шт.</p>
+        <p className="category">Категория: {flower.category}</p>
+      </div>
+      <div className="flower-actions">
+        {user?.role === 'customer' && flower.stock > 0 && (
+          <button 
+            onClick={handleAddToCart}
+            className="add-to-cart-btn"
+          >
+            Добавить в корзину
+          </button>
+        )}
+        
+        {['manager', 'admin'].includes(user?.role) && (
+          <button 
+            onClick={() => onUpdate(flower)}
+            className="edit-btn"
+          >
+            Редактировать
+          </button>
+        )}
+        
+        {user?.role === 'admin' && (
+          <button 
+            onClick={handleDelete}
+            className="delete-btn"
+          >
+            Удалить
+          </button>
+        )}
+      </div>
     </div>
   );
 };
