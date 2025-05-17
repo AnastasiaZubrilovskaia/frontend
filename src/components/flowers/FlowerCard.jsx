@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 import flowerService from '../../api/flowers';
 
 const FlowerCard = ({ flower, onUpdate, onDelete }) => {
+  const { addToCart } = useCart(); // Получаем функцию из контекста
   const { user } = useContext(AuthContext);
 
   const handleDelete = async () => {
@@ -11,6 +13,12 @@ const FlowerCard = ({ flower, onUpdate, onDelete }) => {
       onDelete(flower._id);
     } catch (err) {
       console.error('Failed to delete flower:', err);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (flower.stock > 0) {
+      addToCart(flower);
     }
   };
 

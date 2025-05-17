@@ -8,7 +8,9 @@ import OrdersPage from './pages/OrdersPage';
 import ReportsPage from './pages/ReportsPage';
 import ProfilePage from './pages/ProfilePage';
 import AuthPage from './pages/AuthPage';
+import CartPage from './pages/CartPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import UsersPage from './pages/UsersPage';
 
 function App() {
   return (
@@ -18,8 +20,20 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/flowers" element={<FlowersPage />} />
               <Route path="/auth" element={<AuthPage />} />
+              
+              {/* Public routes */}
+              <Route path="/flowers" element={<FlowersPage />} />
+              
+              {/* Protected routes */}
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <CartPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/orders"
                 element={
@@ -36,10 +50,36 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              
+              {/* Admin routes */}
               <Route
-                path="/reports"
+                path="/admin/users"
                 element={
-                  <ProtectedRoute roles={['manager', 'admin']}>
+                  <ProtectedRoute roles={['admin']}>
+                    <UsersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/orders"
+                element={
+                  <ProtectedRoute roles={['admin', 'manager']}>
+                    <OrdersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/flowers"
+                element={
+                  <ProtectedRoute roles={['admin', 'manager']}>
+                    <FlowersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/reports"
+                element={
+                  <ProtectedRoute roles={['admin', 'manager']}>
                     <ReportsPage />
                   </ProtectedRoute>
                 }

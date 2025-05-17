@@ -1,30 +1,59 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
 const Header = () => {
   const { user, logout } = useAuth();
+  const { cart } = useCart();
 
   return (
     <header className="header">
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/flowers">Flowers</Link>
+      <nav className="nav">
+        {/* Основные ссылки для всех */}
+        <Link to="/" className="nav-link">Главная</Link>
+        <Link to="/flowers" className="nav-link">Каталог</Link>
+
+        {/* Для авторизованных пользователей */}
         {user && (
           <>
-            <Link to="/orders">My Orders</Link>
-            {['manager', 'admin'].includes(user.role) && (
-              <Link to="/reports">Reports</Link>
+            {/* Корзина и заказы только для покупателей */}
+            {user.role === 'customer' && (
+              <>
+                <Link to="/cart" className="nav-link">
+                  Корзина ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+                </Link>
+                <Link to="/orders" className="nav-link">Мои заказы</Link>
+              </>
             )}
-            <Link to="/profile">Profile</Link>
+
+            {/* Управление для админов/менеджеров */}
+            {['manager', 'admin'].includes(user.role) && (
+              <>
+                <Link to="/admin/orders" className="nav-link">Заказы</Link>
+                <Link to="/admin/flowers" className="nav-link">Управление товарами</Link>
+              </>
+            )}
+
+            {/* Для админов */}
+            {user.role === 'admin' && (
+              <>
+                <Link to="/admin/users" className="nav-link">Пользователи</Link>
+                <Link to="/admin/reports" className="nav-link">Отчеты</Link>
+              </>
+            )}
+
+            {/* Кнопка выхода */}
+            <button onClick={logout} className="logout-btn">
+              Выйти ({user.name})
+            </button>
           </>
         )}
-        {!user ? (
-          <Link to="/auth">Login</Link>
-        ) : (
-          <button onClick={logout}>Logout</button>
+
+        {/* Для гостей */}
+        {!user && (
+          <Link to="/auth" className="nav-link">Войти</Link>
         )}
       </nav>
-      {user && <div className="welcome">Welcome, {user.name}!</div>}
     </header>
   );
 };

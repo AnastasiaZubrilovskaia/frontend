@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import FlowerCard from './FlowerCard';
 import FlowerForm from './FlowerForm';
+import { useAuth } from '../../context/AuthContext';
+import flowerService from '../../api/flowers';
 
-const FlowerList = ({ flowers, onUpdateList }) => {
+const FlowerList = ({ flowers, onUpdateList, onAddToCart }) => {
+  const { user } = useAuth();
   const [editingFlower, setEditingFlower] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -11,8 +14,15 @@ const FlowerList = ({ flowers, onUpdateList }) => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
-    onUpdateList(flowers.filter(f => f._id !== id));
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this flower?')) {
+      try {
+        await flowerService.deleteFlower(id);
+        onUpdateList();
+      } catch (error) {
+        console.error('Failed to delete flower:', error);
+      }
+    }
   };
 
   const handleFormSuccess = () => {

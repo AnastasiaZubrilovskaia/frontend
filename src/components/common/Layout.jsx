@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
       <Header />
       <main className="main-content">{children}</main>
       <footer className="footer">
-        <p>© 2023 Flower Shop. All rights reserved.</p>
+        <p>© 2025 Flower Shop.</p>
       </footer>
     </div>
   );
