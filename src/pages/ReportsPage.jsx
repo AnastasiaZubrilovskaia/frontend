@@ -7,7 +7,6 @@ import TopCustomers from '../components/reports/TopCustomers';
 const ReportsPage = () => {
   const [salesData, setSalesData] = useState([]);
   const [topCustomers, setTopCustomers] = useState([]);
-  const [ordersByDay, setOrdersByDay] = useState([]);
   const { user, token } = useAuth();
 
   useEffect(() => {
@@ -15,11 +14,9 @@ const ReportsPage = () => {
       try {
         const sales = await reportService.getSalesByCategory(token);
         const customers = await reportService.getTopCustomers(token);
-        const orders = await reportService.getOrdersByDay(token);
         
         setSalesData(sales);
         setTopCustomers(customers);
-        setOrdersByDay(orders);
       } catch (error) {
         console.error('Failed to fetch reports:', error);
       }
@@ -45,17 +42,6 @@ const ReportsPage = () => {
           <TopCustomers customers={topCustomers} />
         </section>
       )}
-
-      <section className="report-section">
-        <h2>Orders by Day</h2>
-        <ul>
-          {ordersByDay.map((day) => (
-            <li key={day._id}>
-              {day._id}: {day.count} orders (${day.total.toFixed(2)})
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 };

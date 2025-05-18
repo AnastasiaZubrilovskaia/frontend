@@ -22,20 +22,10 @@ const getTopCustomers = async (token) => {
   return response.data;
 };
 
-const getOrdersByDay = async (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  };
-  const response = await axios.get(`${API_URL}/orders-by-day`, config);
-  return response.data;
-};
 
 const reportService = {
   getSalesByCategory,
-  getTopCustomers,
-  getOrdersByDay
+  getTopCustomers
 };
 
 export default reportService;

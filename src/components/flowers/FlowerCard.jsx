@@ -20,13 +20,6 @@ const FlowerCard = ({ flower, onUpdate, onDelete, onAddToCart }) => {
 
   return (
     <div className="flower-card">
-      <div className="flower-image">
-        {flower.image ? (
-          <img src={flower.image} alt={flower.name} />
-        ) : (
-          <div className="no-image">Нет изображения</div>
-        )}
-      </div>
       <div className="flower-info">
         <h3>{flower.name}</h3>
         <p className="description">{flower.description}</p>
