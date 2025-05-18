@@ -13,7 +13,6 @@ const login = async (credentials) => {
 };
 
 const logout = () => {
-  // Token removal is handled by AuthContext
 };
 
 const authService = {

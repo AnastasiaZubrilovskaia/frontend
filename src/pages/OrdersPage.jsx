@@ -29,7 +29,7 @@ const OrdersPage = () => {
 
   return (
     <div className="orders-page">
-      <h1>{['manager', 'admin'].includes(user?.role) ? 'All Orders' : 'My Orders'}</h1>
+      <h1>{['manager', 'admin'].includes(user?.role) ? 'Все заказы' : 'Мои заказы'}</h1>
       <OrderList orders={orders} />
     </div>
   );

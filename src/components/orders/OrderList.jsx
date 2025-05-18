@@ -4,7 +4,7 @@ const OrderList = ({ orders }) => {
   return (
     <div className="order-list">
       {orders.length === 0 ? (
-        <p>No orders found</p>
+        <p>Заказы не найдены</p>
       ) : (
         orders.map(order => (
           <OrderCard key={order._id} order={order} />

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import FlowerCard from './FlowerCard';
 import FlowerForm from './FlowerForm';
-import { useAuth } from '../../context/AuthContext';
 import flowerService from '../../api/flowers';
 
 const FlowerList = ({ onAddToCart, token, user }) => {

@@ -5,11 +5,11 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <h1>Welcome to Flower Shop</h1>
+      <h1>Добро пожаловать в Цветочный магазин</h1>
       {user ? (
-        <p>Hello, {user.name}! Browse our collection of beautiful flowers.</p>
+        <p>Hello, {user.name}! Посмотрите нашу коллекцию цветов.</p>
       ) : (
-        <p>Please login or register to start shopping.</p>
+        <p>Пожалуйста, зарегистрируйтесь или войдите, чтобы совершать покупки.</p>
       )}
     </div>
   );

@@ -1,39 +1,42 @@
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
+//Интерактивная столбчатая диаграмма
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const SalesChart = ({ data }) => {
+  //Создает структуру данных, которую ожидает Chart.js
   const chartData = {
-    labels: data.map(item => item._id),
-    datasets: [
+    labels: data.map(item => item._id), //названия категорий (ось X)
+    datasets: [ //наборы данных:
       {
-        label: 'Total Sales',
+        label: 'Общий объем продаж',
         data: data.map(item => item.totalSales),
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
       },
       {
-        label: 'Items Sold',
+        label: 'Проданные товары',
         data: data.map(item => item.totalItems),
         backgroundColor: 'rgba(153, 102, 255, 0.6)',
       }
     ]
   };
 
+  //Настройки диаграммы
   const options = {
-    responsive: true,
+    responsive: true, // Адаптивность
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top',  // Позиция легенды
       },
       title: {
         display: true,
-        text: 'Sales by Category',
+        text: 'Продажи по категориям',
       },
     },
     scales: {
       y: {
-        beginAtZero: true
+        beginAtZero: true // Ось Y начинается с 0
       }
     }
   };

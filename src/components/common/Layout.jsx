@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
       <Header />
       <main className="main-content">{children}</main>
       <footer className="footer">
-        <p>© 2025 Flower Shop.</p>
+        <p>© Цветочный магазин.</p>
       </footer>
     </div>
   );

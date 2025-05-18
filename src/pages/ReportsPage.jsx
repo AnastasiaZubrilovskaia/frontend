@@ -29,16 +29,16 @@ const ReportsPage = () => {
 
   return (
     <div className="reports-page">
-      <h1>Reports</h1>
+      <h1>Отчеты</h1>
       
       <section className="report-section">
-        <h2>Sales by Category</h2>
+        <h2>Продажи по категориям</h2>
         <SalesChart data={salesData} />
       </section>
 
       {user?.role === 'admin' && (
         <section className="report-section">
-          <h2>Top Customers</h2>
+          <h2>Топ покупателей</h2>
           <TopCustomers customers={topCustomers} />
         </section>
       )}

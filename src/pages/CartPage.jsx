@@ -2,18 +2,19 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from 'react'; // Add this import
+import { useState } from 'react'; 
 
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
   const { user, token } = useAuth();
-  const [error, setError] = useState(null); // Add error state
+  const [error, setError] = useState(null); 
 
-  // Calculate total
+  //расчет общей суммы
   const total = cart.reduce((sum, item) => {
     return sum + (item.flower?.price || 0) * item.quantity;
   }, 0);
 
+  //оформление заказа
   const handleCheckout = async () => {
     try {
       const orderData = {
@@ -36,9 +37,8 @@ const CartPage = () => {
       );
       
       if (response.status === 200 || response.status === 201) {
-        clearCart();
+        clearCart(); // Очистка корзины после успешного заказа
         setError(null);
-        // Добавляем сообщение об успешном оформлении
         alert('Заказ успешно оформлен!');
       }
     } catch (error) {

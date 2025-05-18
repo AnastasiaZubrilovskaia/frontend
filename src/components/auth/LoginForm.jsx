@@ -22,7 +22,7 @@ const LoginForm = ({ switchToRegister }) => {
 
   return (
     <div className="auth-form">
-      <h2>Login</h2>
+      <h2>Войти</h2>
       {error && <div className="error">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -35,7 +35,7 @@ const LoginForm = ({ switchToRegister }) => {
           />
         </div>
         <div className="form-group">
-          <label>Password</label>
+          <label>Пароль</label>
           <input
             type="password"
             value={password}
@@ -43,12 +43,12 @@ const LoginForm = ({ switchToRegister }) => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Вход</button>
       </form>
       <p>
-        Don't have an account?{' '}
+        Нет аккаунта?{' '}
         <button onClick={switchToRegister} className="link-button">
-          Register
+          Зарегистрироваться
         </button>
       </p>
     </div>
